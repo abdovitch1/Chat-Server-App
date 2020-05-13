@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-button *ngIf="back" slot="start" (click)="goback.emit()">
+      <ion-icon src="assets/icon/multimedia-option.svg"></ion-icon>
+    </ion-button>
+    <ion-title *ngIf="!title">
+      Chat App
+    </ion-title>
+    <ion-title *ngIf="title">
+      {{title}}
+    </ion-title>
+    <ion-button *ngIf="auth" slot="end" (click)="logout()">Logout</ion-button>
+  </ion-toolbar>
+</ion-header>

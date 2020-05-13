@@ -1,0 +1,7 @@
+{
+  "name": "ionic_crush_chat",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

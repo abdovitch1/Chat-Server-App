@@ -1,0 +1,32 @@
+<ion-grid>
+  <ion-row *ngFor="let message of friend.messeges">
+
+    <ion-col size="9" *ngIf="message.owner === 'other'" class="message other-message">
+      <span>{{ message.messege }}</span>
+      <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
+    </ion-col>
+
+    <ion-col offset="3" size="9" *ngIf="message.owner === 'me'" class="message my-message">
+      <span>{{ message.messege }}</span>
+      <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
+    </ion-col>
+
+  </ion-row>
+</ion-grid>
+
+
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-row align-items-center>
+      <ion-col size="10">
+        <ion-textarea auto-grow class="message-input" rows="1" [(ngModel)]="message"></ion-textarea>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button expand="block" fill="clear" color="primary" [disabled]="message === ''" class="msg-btn"
+          (click)="sendMessage()">
+          <ion-icon name="ios-send" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
