@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { concat } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,9 +35,15 @@ export class SocketService {
 
   createDeviceString() {
     this.deviceSTR = this.makeRandom();
+    // console.log('in socket/socket.service create: ', this.deviceSTR)
   }
 
   getDeviceString(){
+    if(!this.deviceSTR){
+      this.createDeviceString();
+    }
+    // console.log('in socket/socket.service get: ', this.deviceSTR)
+    // alert('get device STR')
     return this.deviceSTR;
   }
 
@@ -60,6 +67,6 @@ export class SocketService {
   
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
+    // console.log(result);
   }
 }

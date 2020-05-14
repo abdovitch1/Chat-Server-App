@@ -19,24 +19,25 @@ export class FriendListViewComponent implements OnInit {
   constructor(private a: AuthService) { }
 
   ngOnInit() {
-    // console.log('friend List: ', this.friendList)
-    // if (this.friendList) {
-    //   this.friendList.subscribe((friends) => {
-    //     console.log('this.OnlineNotFriends ', this.friends);
-    //     this.friends = friends;
-    //     console.log('this.OnlineNotFriends ', this.friends);
-    //   });
-
-    // }
-
-    // this.a.getOnlinePeaple().subscribe((data) => {
-    //   this.friends = data;
-    // })
-
   }
 
-  chooseChat(friend) {
-    this.friendData.emit(friend);
+  // ionViewDidEnter(){
+  //   alert('ionviewdidenter friend-list-view')
+    
+  // }
+
+  // ngOnDestroy(){
+  //   alert('destroy  friend-list-view')
+  // }
+
+  // ionViewDidLeave(){
+  //   alert('ionViewDidLeave friend-list-view')
+  // }
+
+
+  chooseChat(friendInd, userName) {
+
+    this.friendData.emit({friendInd, userName});
   }
 
 }

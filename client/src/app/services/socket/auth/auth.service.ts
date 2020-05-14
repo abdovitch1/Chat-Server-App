@@ -40,7 +40,7 @@ export class AuthService {
 
   signUp(userData: any) {
     userData.deviceSTR = this.deviceSTR;
-    console.log('user data in signup service: ',userData)
+    // console.log('user data in signup service: ',userData)
     this.socket.connect();
     this.socket.emit('signUp', userData);
     // this.socketClient.emit('signUp', userData);
@@ -101,6 +101,6 @@ export class AuthService {
   
     await alert.present();
     let result = await alert.onDidDismiss();
-    console.log(result);
+    // console.log(result);
   }
 }

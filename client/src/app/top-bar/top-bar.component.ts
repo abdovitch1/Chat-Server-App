@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output,EventEmitter } from '@angular/core';
-import { AuthService } from '../services/socket/emit/auth.service';
-import * as AuthServiceListen from '../services/socket/listen/auth.service';
+import * as ServInd from '../services/auth/auth.service'
 @Component({
   selector: 'app-top-bar',
   templateUrl: './top-bar.component.html',
@@ -13,15 +12,14 @@ export class TopBarComponent implements OnInit {
   @Output() goback = new EventEmitter();
   userData: any;
   constructor(
-    private authServEmit: AuthService,
-    private authServListen: AuthServiceListen.AuthService,
+    private ServInd: ServInd.AuthService
   ) { }
 
   ngOnInit() {
-    this.userData = this.authServListen.getUser();
+    this.userData = this.ServInd.getUser()
   }
 
   logout(){
-    this.authServEmit.logout(this.userData.userName);
+    this.ServInd.logout(false);
   }
 }

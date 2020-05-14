@@ -61,11 +61,12 @@ io.on('connection', function (socket) {
     // });
 
     socket.on('login', (userData) => {
-        // console.log('Login: userData: ',userData)
+        console.log('Login: userData: ',userData)
         var userName = userData.userName;
         var password = userData.password;
 
         var deviceSTR = userData.deviceSTR;
+        console.log('Login: deviceSTR',deviceSTR)
         User.getUser(userName, password, (data,err) => {
             // console.log('data from login: ', data);
             if(err){

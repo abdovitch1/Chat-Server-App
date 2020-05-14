@@ -26,7 +26,7 @@ import { AppHomePageModule } from './app-home/app-home.module';
 //  'https://us-central1-ionic-chat-59369.cloudfunctions.net/app'
 //   'https://b070f633.ngrok.io/'
 // $ ngrok http 3000 
-const config: SocketIoConfig = { url: 'https://63a5b52c.ngrok.io/', options: { transports: ['websocket', 'polling', 'flashsocket'] } };
+const config: SocketIoConfig = { url: 'https://d47652b9.ngrok.io/', options: { transports: ['websocket', 'polling', 'flashsocket'] } };
 
 @NgModule({
   declarations: [AppComponent],

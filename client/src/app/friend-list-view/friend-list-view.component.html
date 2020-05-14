@@ -5,12 +5,12 @@
     <ion-title>{{title}}</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-item *ngFor="let item of friendList" (click)="chooseChat(item)">
+<ion-item *ngFor="let item of friendList; let i = index " (click)="chooseChat(i, item.userName)">
   <ion-icon name="person-add-outline" src="assets/icon/person-add-outline.svg" slot="start"></ion-icon>
   <ion-label>
     <h2>{{item.userName}}</h2>
   </ion-label>
-  <ion-icon class="ActiveIcon" name="radio-button-on" src="assets/icon/filled-circle.svg" slot="end"></ion-icon>
+  <ion-icon class="ActiveIcon" name="radio-button-on" src="assets/icon/filled-circle.svg" *ngIf="item.isActive" slot="end"></ion-icon>
   <p slot="end" *ngIf="item.newMessege.length > 0">{{item.newMessege.length}}</p>
 </ion-item>
 

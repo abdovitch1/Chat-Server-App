@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as authSocketServListen from '../services/socket/listen/auth.service';
-import { StorageService } from '../services/storage/storage.service';
+import * as ServInd from '../services/auth/auth.service'
 
 @Component({
   selector: 'app-app-home',
@@ -16,39 +15,42 @@ export class AppHomePage implements OnInit {
 
   currentUser: any;
   constructor(
-    private authSocketServListen: authSocketServListen.AuthService,
-    private storageServ: StorageService
+    private ServInd: ServInd.AuthService
   ) {
-    
+
   }
 
   ngOnInit() {
-    this.authSocketServListen.addMeToNewUsers();
-    this.authSocketServListen.addUsersToMe();
-    this.authSocketServListen.logout();
-    this.friends = this.authSocketServListen.getFriends();
-    this.OnlineNotFriends = this.authSocketServListen.getOnlinePeaple();
-    this.currentUser = this.authSocketServListen.getUser();
-    this.authSocketServListen.getMessege();
+    this.currentUser = this.ServInd.getUser()
+    this.friends = this.ServInd.getFriends();
+    this.OnlineNotFriends = this.ServInd.getOnlineNotFriends();
+
+    this.ServInd.FriendLogout();
+    this.ServInd.NewUserHasCome();
+    this.ServInd.addUsersToMe();
+    this.ServInd.getMessege();
   }
 
-  chooseChat(friendData) {
-    this.chatWith = friendData;
-
-    var ind = this.OnlineNotFriends.indexOf(friendData);
-    if (ind != -1) {
-      this.OnlineNotFriends.splice(ind, 1);
-      this.friends.push(friendData);
+  chooseChat({friendInd, userName}) {
+    console.log('choos chat: ', friendInd, userName)
+    if(this.friends[friendInd]){
+      if(this.friends[friendInd].userName == userName){
+        this.chatWith =  this.friends[friendInd];
+        this.ServInd.chooseChat(this.friends[friendInd]);
+      }else{
+        this.chatWith =  this.OnlineNotFriends[friendInd];
+        this.ServInd.chooseChat(this.OnlineNotFriends[friendInd]);
+      }
+    }else{
+      this.chatWith =  this.OnlineNotFriends[friendInd];
+      this.ServInd.chooseChat(this.OnlineNotFriends[friendInd]);
     }
+    // this.chatWith = friendData;
+    
   }
 
   ionViewWillLeave() {
-    console.log('d5l f ionViewWillLeave')
-
-    this.storageServ.saveIsLoged(true);
-    this.storageServ.saveLastLogUser(this.currentUser.userName);
-    this.storageServ.saveUser(this.currentUser)
-    this.storageServ.saveFriends(this.friends, this.currentUser.userName);
+    this.ServInd.logout(true)
   }
 
   returnback() {

@@ -33,13 +33,36 @@ export class StorageService {
   }
 
   getUser(userName){
-    console.log('getuser')
+    // console.log('getuser')
     // this.storage.clear();
     return this.storage.getItem(userName);
   }
 
   saveFriends(friendsData, userName){
     this.storage.setItem('friends-' + userName, friendsData);
+  }
+
+  saveOtherFriendsHasMSG(friendData, userName){
+    this.storage.getItem('OtherHasMSG--' + userName).then((data) => {
+      if(data){
+        var friend = data.find(f => f.userName == friendData.userName);
+        if(friend ){
+          friend.newMessege.push(...friendData.newMessege)
+        }else{
+          data.push(friendData);
+        }
+        this.storage.setItem('OtherHasMSG--' + userName,data);
+      }
+    }).catch(err => {
+      console.log('error in saveOtherFriendHasMSG: ',err);
+      var arr = [];
+      arr.push(friendData);
+      this.storage.setItem('OtherHasMSG--' + userName,arr);
+    })
+  }
+
+  getOtherFriendsHasMSG(userName){
+    return this.storage.getItem('OtherHasMSG--' + userName);
   }
 
   getFriends(userName){
