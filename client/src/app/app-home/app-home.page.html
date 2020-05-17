@@ -1,11 +1,14 @@
 
 <ion-content *ngIf="!chatWith.userName">
   <app-top-bar [auth]="true" [back]="false"></app-top-bar>
-  <app-friend-list-view [title]="'Friends'" [friendList]="ServInd.getFriends()" (friendData)=chooseChat($event)></app-friend-list-view>
-  <app-friend-list-view [title]="'Make new Friends'" [friendList]="ServInd.getOnlineNotFriends()" (friendData)=chooseChat($event)></app-friend-list-view>
+  <app-friend-list-view [title]="'Friends'" [friendList]="friends" (friendData)=chooseChat($event)></app-friend-list-view>
+  <app-friend-list-view [title]="'Make new Friends'" [friendList]="OnlineNotFriends" (friendData)=chooseChat($event)></app-friend-list-view>
 </ion-content>
 
 <ion-content *ngIf="chatWith.userName">
   <app-top-bar [auth]="true" [back]="true" [title]="chatWith.userName" (goback)="returnback()"></app-top-bar>
-  <app-chat [friend]="chatWith"></app-chat>
+  <div>
+    <app-chat [friend]="chatWith"></app-chat>
+  </div>
+  
 </ion-content>

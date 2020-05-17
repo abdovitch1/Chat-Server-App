@@ -10,24 +10,28 @@ import { concat } from 'rxjs';
 export class SocketService {
   deviceSTR: String;
   isConnected: Boolean;
-  constructor(private socket: Socket, private toastCtrl: ToastController,private alertCtrl: AlertController,) {
+  constructor(private socket: Socket, private toastCtrl: ToastController, private alertCtrl: AlertController, ) {
     this.isConnected = false;
   }
-  connect(){
-    if( !this.isConnected){
+  connect() {
+    if (!this.isConnected) {
       this.socket.connect();
       this.isConnected = true;
     }
   }
 
-  disconnect(){
-    if( this.isConnected ){
+  disconnect() {
+    if (this.isConnected) {
       this.socket.disconnect();
       this.isConnected = false;
-    }    
+    }
   }
 
-  error(){
+  getSocket() {
+    return this.socket;
+  }
+
+  error() {
     this.socket.fromEvent('error' + String(this.deviceSTR)).subscribe((data: any) => {
       this.presentAlert(data.msg, 'Error');
     });
@@ -38,8 +42,8 @@ export class SocketService {
     // console.log('in socket/socket.service create: ', this.deviceSTR)
   }
 
-  getDeviceString(){
-    if(!this.deviceSTR){
+  getDeviceString() {
+    if (!this.deviceSTR) {
       this.createDeviceString();
     }
     // console.log('in socket/socket.service get: ', this.deviceSTR)
@@ -64,7 +68,7 @@ export class SocketService {
       message: msg,
       buttons: ['OK'],
     });
-  
+
     await alert.present();
     let result = await alert.onDidDismiss();
     // console.log(result);

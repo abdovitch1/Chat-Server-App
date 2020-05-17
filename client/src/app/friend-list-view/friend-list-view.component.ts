@@ -35,9 +35,9 @@ export class FriendListViewComponent implements OnInit {
   // }
 
 
-  chooseChat(friendInd, userName) {
+  chooseChat(friendData) {
 
-    this.friendData.emit({friendInd, userName});
+    this.friendData.emit(friendData);
   }
 
 }

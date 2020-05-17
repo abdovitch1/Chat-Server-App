@@ -3,8 +3,10 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { SocketService } from './services/socket/socket.service';
-import { AuthService } from './services/auth/auth.service';
+import * as ServInd from './services/auth/auth.service';
+import * as socketServListen from './services/socket/listen/auth.service'
+
+import * as x from './services/storage/storage.service'
 
 @Component({
   selector: 'app-root',
@@ -13,15 +15,26 @@ import { AuthService } from './services/auth/auth.service';
 })
 export class AppComponent {
   constructor(
-    private socketServ: SocketService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private auth: AuthService
+    private ServInd: ServInd.AuthService,
+    private socketServListen: socketServListen.AuthService,
+
+    private x: x.StorageService
   ) {
     this.initializeApp();
-    // this.socketServ.createDeviceString();
-    this.auth.login()
+
+    // this.x.clear()
+
+    this.ServInd.FriendLogout();
+    this.ServInd.NewUserHasCome();
+    this.ServInd.addUsersToMe();
+    this.ServInd.getMessege();
+    
+    this.socketServListen.socketDisconnect()
+     
+    this.ServInd.login()
   }
 
   initializeApp() {

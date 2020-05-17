@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import * as socketInd from '../socket.service'
 
 @Injectable({
   providedIn: 'root'
@@ -7,13 +8,16 @@ import { Socket } from 'ngx-socket-io';
 export class AuthService {
 
   deviceSTR: String;
+  // socket;
 
   constructor(
     private socket: Socket,
-  ) {}
+    private socketInd: socketInd.SocketService
+  ) {
+    this.socket = socketInd.getSocket();
+  }
 
   login(userData: any) {
-    // console.log('in emit: login userData',userData)
     this.socket.emit('login', userData);
   }
 
@@ -25,20 +29,19 @@ export class AuthService {
     this.socket.emit('check-user-name', userData);
   }
 
-  letNewKnowMe(myData, hisName){
-    this.socket.emit('addEachOther', {myData, hisName});
+  letNewKnowMe(myData, hisName) {
+    this.socket.emit('addEachOther', { myData, hisName });
   }
 
-  goOnline(userData){
+  goOnline(userData) {
     this.socket.emit('goOnline', userData);
   }
 
-  logout(userName){
-    // console.log('authServiceEmit, Logout: ',userName)
-    this.socket.emit('logout', {userName});
+  logout(userName) {
+    this.socket.emit('logout', { userName });
   }
 
-  sendMessege(data){
-    this.socket.emit('send-messege',data);
+  sendMessege(data) {
+    this.socket.emit('send-messege', data);
   }
 }

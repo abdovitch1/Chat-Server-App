@@ -23,30 +23,17 @@ export class AppHomePage implements OnInit {
   ngOnInit() {
     this.currentUser = this.ServInd.getUser()
     this.friends = this.ServInd.getFriends();
-    this.OnlineNotFriends = this.ServInd.getOnlineNotFriends();
-
-    this.ServInd.FriendLogout();
-    this.ServInd.NewUserHasCome();
-    this.ServInd.addUsersToMe();
-    this.ServInd.getMessege();
+    this.OnlineNotFriends = this.ServInd.getOnlineNotFriends(); 
   }
 
-  chooseChat({friendInd, userName}) {
-    console.log('choos chat: ', friendInd, userName)
-    if(this.friends[friendInd]){
-      if(this.friends[friendInd].userName == userName){
-        this.chatWith =  this.friends[friendInd];
-        this.ServInd.chooseChat(this.friends[friendInd]);
-      }else{
-        this.chatWith =  this.OnlineNotFriends[friendInd];
-        this.ServInd.chooseChat(this.OnlineNotFriends[friendInd]);
-      }
-    }else{
-      this.chatWith =  this.OnlineNotFriends[friendInd];
-      this.ServInd.chooseChat(this.OnlineNotFriends[friendInd]);
-    }
-    // this.chatWith = friendData;
-    
+  async chooseChat(friendData) {
+    var x = await this.ServInd.chooseChat(friendData);
+    this.friends = x.friends;
+    this.OnlineNotFriends = x.OnlineNotFriends;
+
+
+    var ind = this.OnlineNotFriends.indexOf(friendData);
+    this.chatWith = friendData;
   }
 
   ionViewWillLeave() {
@@ -54,6 +41,7 @@ export class AppHomePage implements OnInit {
   }
 
   returnback() {
+    this.chatWith = undefined;
     this.chatWith = {}
   }
 
