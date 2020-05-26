@@ -12,7 +12,7 @@
 
 <ion-content *ngIf="chatWith.userName">
   <app-top-bar [auth]="true" [back]="true" [title]="chatWith.userName" (goback)="returnback()"></app-top-bar>
-  <div>
+  <div style="height: 83%;">
     <app-chat [friend]="chatWith"></app-chat>
   </div>
   

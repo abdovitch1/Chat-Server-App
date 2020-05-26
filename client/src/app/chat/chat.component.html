@@ -1,18 +1,21 @@
-<ion-grid>
-  <ion-row *ngFor="let message of friend.messeges">
+<div class="messeges-container">
+  <ion-grid>
+    <ion-row *ngFor="let message of friend.messeges">
+  
+      <ion-col size="9" *ngIf="message.owner === 'other'" class="message other-message">
+        <span>{{ message.messege }}</span>
+        <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
+      </ion-col>
+  
+      <ion-col offset="3" size="9" *ngIf="message.owner === 'me'" class="message my-message">
+        <span>{{ message.messege }}</span>
+        <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
+      </ion-col>
+  
+    </ion-row>
+  </ion-grid>
+</div>
 
-    <ion-col size="9" *ngIf="message.owner === 'other'" class="message other-message">
-      <span>{{ message.messege }}</span>
-      <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
-    </ion-col>
-
-    <ion-col offset="3" size="9" *ngIf="message.owner === 'me'" class="message my-message">
-      <span>{{ message.messege }}</span>
-      <div class="time" text-right><br>{{ message.createdDate | date:'short' }}</div>
-    </ion-col>
-
-  </ion-row>
-</ion-grid>
 
 
 <ion-footer>
