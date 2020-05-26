@@ -65,6 +65,9 @@ export class StorageService {
   saveFriends(friendsData, userName) {
     console.log('storage_serv: saveFriends: ', friendsData)
     console.log('storage_serv: saveFriends: ', userName)
+    for(var i=0; i<friendsData.length; i++){
+      friendsData[i].isActive = false;
+    }
     this.storage.setItem('friends-' + userName, friendsData);
   }
 
@@ -72,6 +75,9 @@ export class StorageService {
     console.log('storage_serv: saveOnlineFriends: ', friendData)
     console.log('storage_serv: saveOnlineFriends: ', userName)
     var savedData = friendData.filter(f => f.newMessege.length > 0)
+    for(var i=0; i<savedData.length; i++){
+      savedData[i].isActive = false;
+    }
     this.storage.setItem('OtherHasMSG--' + userName, savedData);
 
     // this.storage.getItem('OtherHasMSG--' + userName).then((data) => {

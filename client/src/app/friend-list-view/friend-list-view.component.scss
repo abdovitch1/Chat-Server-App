@@ -3,11 +3,26 @@ p {
   position: absolute;
   font-size: 10px;
   font-weight: 700;
-  right: 7%;
-  top: 9px;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .ActiveIcon{
   fill: green;
   font-size: 17px;
+  flex-shrink: 0;
+}
+
+.header{
+  position: fixed;
+}
+
+.items{
+  padding-top: 12%;
+}
+
+.onlineIcon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

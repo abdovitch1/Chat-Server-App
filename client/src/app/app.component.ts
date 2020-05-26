@@ -26,6 +26,8 @@ export class AppComponent {
     this.initializeApp();
 
     // this.x.clear()
+    this.ServInd.loginListen();
+    this.ServInd.getError();
 
     this.ServInd.FriendLogout();
     this.ServInd.NewUserHasCome();

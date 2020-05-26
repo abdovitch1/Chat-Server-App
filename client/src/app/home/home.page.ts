@@ -17,8 +17,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     // this.authSocketListen.login();
     // this.socketSetv.error();
-    this.socketServInd.loginListen();
-    this.socketServInd.getError();
+    
   }
 
   // ngOnDestroy(){

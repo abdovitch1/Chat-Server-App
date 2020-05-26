@@ -40,6 +40,10 @@ export class AppHomePage implements OnInit {
     this.ServInd.logout(true)
   }
 
+  ngOnDestroy(){
+    this.ServInd.logout(true)
+  }
+
   returnback() {
     this.chatWith = undefined;
     this.chatWith = {}

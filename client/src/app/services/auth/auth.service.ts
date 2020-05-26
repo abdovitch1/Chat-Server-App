@@ -5,7 +5,7 @@ import * as socketServEmit from '../socket/emit/auth.service';
 import * as socketServListen from '../socket/listen/auth.service';
 
 import * as storageServ from '../storage/storage.service';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import * as socketIndex from '../socket/socket.service'
 
 
@@ -21,7 +21,8 @@ export class AuthService {
 		private socketServIndex: socketIndex.SocketService,
 		private router: Router,
 		private alertCtrl: AlertController,
-		private loadingCtrl: LoadingController
+		private loadingCtrl: LoadingController,
+		private navCtrl: NavController
 	) {
 		this.deviceSTR = this.socketServIndex.getDeviceString();
 		this.friends = [];
@@ -46,7 +47,8 @@ export class AuthService {
 		}
 		if (this.user) {
 			console.log('this.user: in login: ', this.user)
-			this.router.navigate(['/app-home'], { replaceUrl: true });
+			// this.router.navigate(['/app-home'], { replaceUrl: true });
+			this.navCtrl.navigateForward('/app-home');
 			return;
 		}
 
@@ -69,24 +71,29 @@ export class AuthService {
 						this.socketServEmit.goOnline(userData);
 						this.getFriendsFromStorage('from login l 3adya');
 						this.getOtherFriendsFromStorage();
-						this.router.navigate(['/app-home'], { replaceUrl: true });
+						// this.router.navigate(['/app-home'], { replaceUrl: true });
+						this.navCtrl.navigateForward('/app-home');
 
 
 					}).catch(err => {
 						console.log('3-error: ', err)
-						this.router.navigate(['/home'], { replaceUrl: true });
+						// this.router.navigate(['/home'], { replaceUrl: true });
+						this.navCtrl.navigateForward('/home');
 					})
 				}).catch(err => {
 					console.log('2-error: ', err)
-					this.router.navigate(['/home'], { replaceUrl: true });
+					// this.router.navigate(['/home'], { replaceUrl: true });
+					this.navCtrl.navigateForward('/home');
 				})
 			}
 			else {
-				this.router.navigate(['/home'], { replaceUrl: true });
+				// this.router.navigate(['/home'], { replaceUrl: true });
+				this.navCtrl.navigateForward('/home');
 			}
 		}).catch(err => {
 			console.log('1-error: ', err);
-			this.router.navigate(['/home'], { replaceUrl: true });
+			// this.router.navigate(['/home'], { replaceUrl: true });
+			this.navCtrl.navigateForward('/home');
 		})
 	}
 
@@ -137,7 +144,9 @@ export class AuthService {
 			this.friends = [];
 			this.OnlineNotFriends = [];
 		}
-		this.router.navigate(['/home'], { replaceUrl: true });
+		// this.router.navigate(['/home'], { replaceUrl: true });
+		this.navCtrl.navigateForward('/home');
+
 		this.socketServListen.socketDisconnect();
 	}
 
@@ -199,9 +208,12 @@ export class AuthService {
 
 			this.storageServ.saveIsLoged(true)
 			this.storageServ.saveUser(this.user)
+			alert('qbl l navigate')
+			// this.router.dispose();
+			// this.router.navigate(['/app-home'], { replaceUrl: true });
+			this.navCtrl.navigateForward('/app-home');
 
-			this.router.navigate(['/app-home'], { replaceUrl: true });
-
+			alert('b3d l navigate')
 			this.getFriendsFromStorage('loginListen');
 			this.getOtherFriendsFromStorage();
 		})
@@ -244,6 +256,7 @@ export class AuthService {
 					this.addToOnlineNotFriends(data)
 				}
 			} else {
+				alert('addUsersToMe: d5l fel else ya m3fn')
 				newUser.deviceSTR = data.userData.deviceSTR;
 				newUser.isActive = true;
 			}
@@ -269,19 +282,7 @@ export class AuthService {
 	}
 
 	checkUserNameResponse() {
-		return this.socketServListen.checkUserName()//.subscribe((data: any) => {
-		//   console.log('ServInd checkUserNameResponse: ', data)
-		//   if (data.msg) {
-		//     bool = true;
-		//     return true;
-
-		//   } else {
-		//     this.presentAlert('This user name is already exist!', 'Error');
-		//     bool = false;
-		//     return false
-		//   }
-		// })
-		// return bool
+		return this.socketServListen.checkUserName()
 	}
 
 	getMessege() {
@@ -318,21 +319,12 @@ export class AuthService {
 	}
 
 	chooseChat(friendData) {
-		//('1-ServInd: chooseChat: friends: ',this.friends)
-		//console.log('1-ServInd: chooseChat: OnlineNotFriends: ',this.OnlineNotFriends)
-		// console.log('1-ServInd: chooseChat: friendData: ', friendData)
-
 		var ind = this.OnlineNotFriends.indexOf(friendData);
-		// console.log('ServInd: chooseCaht: ind: ', ind)
 		if (ind != -1) {
 			this.friends.push(friendData);
 			this.OnlineNotFriends[ind] = undefined;
 			this.OnlineNotFriends.splice(ind, 1);
-			// console.log('friendData: ',friendData)
 		}
-		// console.log('2-ServInd: chooseChat: friends: ',this.friends)
-		// console.log('2-ServInd: chooseChat: OnlineNotFriends: ',this.OnlineNotFriends)
-		// console.log('2-ServInd: chooseChat: friendData: ', friendData)
 		return {
 			friends: this.friends,
 			OnlineNotFriends: this.OnlineNotFriends
