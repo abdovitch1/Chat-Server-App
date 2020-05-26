@@ -39,15 +39,12 @@ export class SocketService {
 
   createDeviceString() {
     this.deviceSTR = this.makeRandom();
-    // console.log('in socket/socket.service create: ', this.deviceSTR)
   }
 
   getDeviceString() {
     if (!this.deviceSTR) {
       this.createDeviceString();
     }
-    // console.log('in socket/socket.service get: ', this.deviceSTR)
-    // alert('get device STR')
     return this.deviceSTR;
   }
 

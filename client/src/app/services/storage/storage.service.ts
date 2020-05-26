@@ -30,7 +30,6 @@ export class StorageService {
 
   }
   isLoged() {
-    console.log('isLoged')
     return this.storage.getItem('isLoged');
   }
 
@@ -42,29 +41,22 @@ export class StorageService {
   }
 
   saveLastLogUser(userName) {
-    console.log('storage_serv: saveLastLogUser: ', userName)
     this.storage.setItem('userName', userName)
   }
 
   getLastLogUserName() {
-    console.log('getLastLogUserName')
     return this.storage.getItem('userName');
   }
 
   saveUser(userData) {
-    console.log('storage_serv: saveUser: ', userData)
     this.storage.setItem(userData.userName, userData);
   }
 
   getUser(userName) {
-    console.log('getuser')
-    // this.storage.clear();
     return this.storage.getItem(userName);
   }
 
   saveFriends(friendsData, userName) {
-    console.log('storage_serv: saveFriends: ', friendsData)
-    console.log('storage_serv: saveFriends: ', userName)
     for(var i=0; i<friendsData.length; i++){
       friendsData[i].isActive = false;
     }
@@ -72,30 +64,11 @@ export class StorageService {
   }
 
   async saveOtherFriendsHasMSG(friendData, userName) {
-    console.log('storage_serv: saveOnlineFriends: ', friendData)
-    console.log('storage_serv: saveOnlineFriends: ', userName)
     var savedData = friendData.filter(f => f.newMessege.length > 0)
     for(var i=0; i<savedData.length; i++){
       savedData[i].isActive = false;
     }
     this.storage.setItem('OtherHasMSG--' + userName, savedData);
-
-    // this.storage.getItem('OtherHasMSG--' + userName).then((data) => {
-    //   if(data){
-    //     var friend = data.find(f => f.userName == friendData.userName);
-    //     if(friend ){
-    //       friend.newMessege.push(...friendData.newMessege)
-    //     }else{
-    //       data.push(friendData);
-    //     }
-    //     this.storage.setItem('OtherHasMSG--' + userName,data);
-    //   }
-    // }).catch(err => {
-    //   console.log('error in saveOtherFriendHasMSG: ',err);
-    //   var arr = [];
-    //   arr.push(friendData);
-    //   this.storage.setItem('OtherHasMSG--' + userName,arr);
-    // })
   }
 
   getOtherFriendsHasMSG(userName) {

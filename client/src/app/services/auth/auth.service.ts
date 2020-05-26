@@ -5,7 +5,7 @@ import * as socketServEmit from '../socket/emit/auth.service';
 import * as socketServListen from '../socket/listen/auth.service';
 
 import * as storageServ from '../storage/storage.service';
-import { AlertController, LoadingController, NavController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import * as socketIndex from '../socket/socket.service'
 
 
@@ -22,7 +22,6 @@ export class AuthService {
 		private router: Router,
 		private alertCtrl: AlertController,
 		private loadingCtrl: LoadingController,
-		private navCtrl: NavController
 	) {
 		this.deviceSTR = this.socketServIndex.getDeviceString();
 		this.friends = [];
@@ -32,34 +31,26 @@ export class AuthService {
 	user: any;
 	friends: Array<any>;
 	OnlineNotFriends: Array<any>;
-	deviceSTR;// = this.socketServIndex.getDeviceString();
+	deviceSTR;
 	loading;
 
 	login(userData?: any) {
 		this.socketServListen.socketConnect();
 		this.presentLoading()
-		console.log('login in servInd: ', userData)
 		if (userData) {
 			userData.deviceSTR = this.deviceSTR;
-			console.log('login in servInd: d5l fel if: ')
 			this.socketServEmit.login(userData);
 			return;
 		}
 		if (this.user) {
-			console.log('this.user: in login: ', this.user)
-			// this.router.navigate(['/app-home'], { replaceUrl: true });
-			this.navCtrl.navigateForward('/app-home');
+			this.router.navigate(['/app-home'], { replaceUrl: true });
 			return;
 		}
 
 		this.storageServ.isLoged().then(isLoged => {
-			console.log('isLoged: ', isLoged)
 			if (isLoged) {
 				this.storageServ.getLastLogUserName().then(userName => {
-					console.log('userName: ', userName)
 					this.storageServ.getUser(userName).then(user => {
-						console.log('user: ', user)
-
 						this.user = user;
 						this.user.deviceSTR = this.deviceSTR;
 						var userData = {
@@ -69,40 +60,31 @@ export class AuthService {
 							deviceSTR: this.user.deviceSTR
 						}
 						this.socketServEmit.goOnline(userData);
-						this.getFriendsFromStorage('from login l 3adya');
+						this.getFriendsFromStorage();
 						this.getOtherFriendsFromStorage();
-						// this.router.navigate(['/app-home'], { replaceUrl: true });
-						this.navCtrl.navigateForward('/app-home');
-
-
+						this.router.navigate(['/app-home'], { replaceUrl: true });
 					}).catch(err => {
 						console.log('3-error: ', err)
-						// this.router.navigate(['/home'], { replaceUrl: true });
-						this.navCtrl.navigateForward('/home');
+						this.router.navigate(['/home'], { replaceUrl: true });
 					})
 				}).catch(err => {
 					console.log('2-error: ', err)
-					// this.router.navigate(['/home'], { replaceUrl: true });
-					this.navCtrl.navigateForward('/home');
+					this.router.navigate(['/home'], { replaceUrl: true });
 				})
 			}
 			else {
-				// this.router.navigate(['/home'], { replaceUrl: true });
-				this.navCtrl.navigateForward('/home');
+				this.router.navigate(['/home'], { replaceUrl: true });
 			}
 		}).catch(err => {
 			console.log('1-error: ', err);
-			// this.router.navigate(['/home'], { replaceUrl: true });
-			this.navCtrl.navigateForward('/home');
+			this.router.navigate(['/home'], { replaceUrl: true });
 		})
 	}
 
-	private getFriendsFromStorage(Str) {
+	private getFriendsFromStorage() {
 		this.storageServ.getFriends(this.user.userName).then(friends => {
-			console.log('getFriendsFromStorage: called from  ', Str, friends)
 			if (friends) {
 				friends.map(f => this.addToFriends(f));
-				// this.friends.push(...friends);
 			}
 		}).catch(err => {
 			console.log('error in getFriendsFromStorage: ', err)
@@ -111,11 +93,8 @@ export class AuthService {
 
 	private getOtherFriendsFromStorage() {
 		this.storageServ.getOtherFriendsHasMSG(this.user.userName).then(friends => {
-			console.log('getOtherFriendsFromStorage: ', friends)
 			if (friends) {
-				// this.OnlineNotFriends.push(...friends);
 				friends.map(f => this.addToOnlineNotFriends(f));
-
 			}
 		}).catch(err => {
 			console.log('error in getOtherFriendsFromStorage: ', err)
@@ -144,9 +123,7 @@ export class AuthService {
 			this.friends = [];
 			this.OnlineNotFriends = [];
 		}
-		// this.router.navigate(['/home'], { replaceUrl: true });
-		this.navCtrl.navigateForward('/home');
-
+		this.router.navigate(['/home'], { replaceUrl: true });
 		this.socketServListen.socketDisconnect();
 	}
 
@@ -208,22 +185,16 @@ export class AuthService {
 
 			this.storageServ.saveIsLoged(true)
 			this.storageServ.saveUser(this.user)
-			alert('qbl l navigate')
-			// this.router.dispose();
-			// this.router.navigate(['/app-home'], { replaceUrl: true });
-			this.navCtrl.navigateForward('/app-home');
 
-			alert('b3d l navigate')
-			this.getFriendsFromStorage('loginListen');
+			this.router.navigate(['/app-home'], { replaceUrl: true });
+
+			this.getFriendsFromStorage();
 			this.getOtherFriendsFromStorage();
 		})
 	}
 
 	NewUserHasCome() {
 		this.socketServListen.addMeToNewUsers().subscribe((data: any) => {
-			console.log('NewUserHasCome: data', data)
-			console.log('user: ', this.user)
-			console.log('data', data)
 			if (data.userData.userName !== this.user.userName) {
 				var newUser = this.friends.find(friend => friend.userName == data.userData.userName);
 				if (!newUser) {
@@ -240,24 +211,17 @@ export class AuthService {
 				}
 				var hisName = data.userData.deviceSTR;
 				this.socketServEmit.letNewKnowMe(myData, hisName)
-
 			}
 		})
 	}
 
 	addUsersToMe() {
 		this.socketServListen.addUsersToMe().subscribe((data: any) => {
-			console.log('addUsersToMe: data', data)
 			var newUser: any = this.friends.find(item => item.userName == data.userName);
 			if (!newUser) {
-
-				newUser = this.OnlineNotFriends.find(item => item.userName == data.userName);
-				if (!newUser) {
-					this.addToOnlineNotFriends(data)
-				}
+				this.addToOnlineNotFriends(data)
 			} else {
-				alert('addUsersToMe: d5l fel else ya m3fn')
-				newUser.deviceSTR = data.userData.deviceSTR;
+				newUser.deviceSTR = data.deviceSTR;
 				newUser.isActive = true;
 			}
 		})
@@ -277,7 +241,6 @@ export class AuthService {
 					this.OnlineNotFriends[OtherFInd1].isActive = false;
 				}
 			}
-
 		})
 	}
 
@@ -287,25 +250,18 @@ export class AuthService {
 
 	getMessege() {
 		this.socketServListen.getMessege().subscribe((data: any) => {
-			console.log('getMessege: data', data)
 			var messege = data.messege;
 			var userName = data.userName;
 			var createdDate = data.createdDate;
 
 			let indFriend = this.friends.findIndex(d => d.userName == userName);
-			console.log('getMessege: this.friends', this.friends)
-			console.log('getMessege: indFriend', indFriend)
 			if (indFriend !== -1) {
-				console.log('getMessege: this.friends[indFriend]', this.friends[indFriend])
 				this.friends[indFriend].newMessege.push({ messege, createdDate, owner: 'other' })
 				this.friends[indFriend].messeges.push({ messege, createdDate, owner: 'other' })
 			}
 
 			let index = this.OnlineNotFriends.findIndex(d => d.userName == userName);
-			console.log('getMessege: this.OnlineNotFriends', this.OnlineNotFriends)
-			console.log('getMessege: index', index)
 			if (index !== -1) {
-				console.log('getMessege: this.OnlineNotFriends[index]', this.OnlineNotFriends[index])
 				this.OnlineNotFriends[index].newMessege.push({ messege, createdDate, owner: 'other' })
 				this.OnlineNotFriends[index].messeges.push({ messege, createdDate, owner: 'other' })
 			}
@@ -338,7 +294,6 @@ export class AuthService {
 			duration: 2000
 		});
 		return await loading.present();
-		// this.loading.present();
 		this.loading.dismiss()
 	}
 	async presentAlert(msg, header) {
@@ -351,6 +306,5 @@ export class AuthService {
 
 		await alert.present();
 		let result = await alert.onDidDismiss();
-		// console.log(result);
 	}
 }
